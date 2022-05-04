@@ -47,6 +47,55 @@ class Vec {
 
 // Give the class a static from method that takes an iterable object as argument and creates a group that contains all the values produced by iterating over it.
 
+// class Group {
+//     constructor(){
+//         this.group = []
+//     }
+
+//     add (value){
+//         if(!this.has(value)) this.group.push(value)
+//     }
+//     delete (value){
+//         if(this.has(value)) 
+//         {this.group.splice(this.group.indexOf(value),1)
+//         }
+//     }
+
+//     has (value){
+//         return this.group.includes(value)
+//     }
+//     static from (obj){
+//         let newGroup = new Group()
+//         for(let item of obj){
+//             newGroup.add(item)
+//         }
+//         return newGroup
+//     }
+// }
+
+// let group = Group.from([10, 20]);
+// console.log(group.has(10));
+// // → true
+// console.log(group.has(30));
+// //→ false
+// group.add(10);
+// group.delete(10);
+// console.log(group.has(10));
+// // → false
+
+
+//----Problem 3------------------------------------------------------------------------------------------------------------------------
+
+
+
+// Iterable groups
+// Make the Group class from the previous exercise iterable. Refer to the section about the iterator interface earlier in the chapter if you aren’t clear on the exact form of the interface anymore.
+
+// If you used an array to represent the group’s members, don’t just return the iterator created by calling the Symbol.iterator method on the array. That would work, but it defeats the purpose of this exercise.
+
+// It is okay if your iterator behaves strangely when the group is modified during iteration.
+
+// // Your code here (and the code from the previous exercise)
 class Group {
     constructor(){
         this.group = []
@@ -73,12 +122,30 @@ class Group {
     }
 }
 
-let group = Group.from([10, 20]);
-console.log(group.has(10));
-// → true
-console.log(group.has(30));
-//→ false
-group.add(10);
-group.delete(10);
-console.log(group.has(10));
-// → false
+class GroupIterator {
+    constructor(obj) {
+        this.index = 0
+        this.group = obj.group
+    }
+    
+    next() {
+        if (this.index == this.group.length) return 
+        {done: true}
+        
+        let value = this.group[this.index]
+        this.index++
+        return {value, done: false};
+    }
+}
+
+Group.prototype[Symbol.iterator] = function() {
+    return new GroupIterator(this);
+  };
+
+for(let value of Group.from(["a", "b", "c"]))  {
+    console.log(value);
+}
+
+// → a
+// → b
+// → c
