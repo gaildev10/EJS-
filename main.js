@@ -96,6 +96,9 @@ class Vec {
 // It is okay if your iterator behaves strangely when the group is modified during iteration.
 
 // // Your code here (and the code from the previous exercise)
+
+
+
 class Group {
     constructor(){
         this.group = []
@@ -122,23 +125,22 @@ class Group {
     }
 }
 
-class GroupIterator {
+
+  class GroupIterator {
     constructor(obj) {
-        this.index = 0
-        this.group = obj.group
+      this.index = 0
+      this.group = obj.group
     }
-    
+  
     next() {
-        if (this.index == this.group.length) return 
-        {done: true}
-        
+        if(this.index == this.group.length) 
+        return{done:true}
         let value = this.group[this.index]
         this.index++
-        return {value, done: false};
+      return {value, done: false};
     }
-}
-
-Group.prototype[Symbol.iterator] = function() {
+  }
+  Group.prototype[Symbol.iterator] = function() {
     return new GroupIterator(this);
   };
 
@@ -149,3 +151,19 @@ for(let value of Group.from(["a", "b", "c"]))  {
 // → a
 // → b
 // → c
+
+
+//----Problem 4------------------------------------------------------------------------------------------------------------------------
+// Borrowing a method
+// Earlier in the chapter I mentioned that an object’s hasOwnProperty can be used as a more robust alternative to the in operator when you want to ignore the prototype’s properties. But what if your map needs to include the word "hasOwnProperty"? You won’t be able to call that method anymore because the object’s own property hides the method value.
+
+
+
+// Can you think of a way to call hasOwnProperty on an object that has its own property by that name?
+
+let map = {one: true, two: true, hasOwnProperty: true};
+
+// Fix this call
+//  console.log(map.hasOwnProperty("one"));
+// → true
+console.log(hasOwnProperty.call(map, 'one'))
